@@ -1,0 +1,37 @@
+nav {
+    display: flex;
+    border-bottom: 0.01em solid #9ba8a6;
+    background-color: #fff;
+}
+
+nav .logo-container {
+    flex: 0.1;
+}
+
+nav .logo-container .logo {
+    width: 7rem;
+    height: 7rem;
+    border: 0;
+}
+
+nav .links-container {
+    display: flex;
+    flex: 1;
+    list-style: none;
+}
+
+nav .links-container>li {
+    flex: 0.1;
+}
+
+@media all and (max-width: 600px) {
+    nav .links-container {
+        flex-wrap: wrap;
+    }
+    nav .links-container>li {
+        flex-basis: 100%;
+    }
+    nav .links-container>li:not(:first-child) {
+        margin-top: 0.8rem;
+    }
+}
