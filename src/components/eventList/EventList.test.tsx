@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { act } from "react-dom/test-utils";
 
-import { AllEvents } from './AllEvents';
+import { EventList } from './EventList';
 
 let container: HTMLDivElement;
 
@@ -20,15 +20,14 @@ afterEach(() => {
 
 it('renders allevents component without crashing', () => {
   act(() => {
-    ReactDOM.render(<AllEvents />, container);
+    ReactDOM.render(<EventList />, container);
   });
 });
 
 
 it('renders allevents with one li for each event', () => {
   act(() => {
-    ReactDOM.render(<AllEvents events={[{
-    
+    ReactDOM.render(<EventList events={[{
       "id": 0,
       "isFree": true,
       "name": "CSS Grids: fact or fiction",
