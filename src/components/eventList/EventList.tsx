@@ -19,6 +19,8 @@ interface IState {
 
 interface IProps {
     events?: IEvent[];
+    onSignup: Function;
+    onRemove: Function;
 }
 
 export class EventList extends React.Component<IProps, IState> {
@@ -40,6 +42,14 @@ export class EventList extends React.Component<IProps, IState> {
         this.eventsByDay = {};
     }
 
+    onSignup = (event: IEvent) => {
+        this.props.onSignup(event);
+    }
+
+    onRemove = (event: IEvent) => {
+        this.props.onRemove(event);
+    }
+
     render() {
         const hasMoreThanOneEvent: boolean = this.state.events.length > 1;
         return (
@@ -52,7 +62,7 @@ export class EventList extends React.Component<IProps, IState> {
                                 {this.eventsByDay[key1].map((event: IEvent) => {
                                     return (
                                         <li key={event.id} className={`${hasMoreThanOneEvent ? 'events-list--border ' : ''}`}>
-                                            <Event event={event} />
+                                            <Event event={event} onSignup={this.onSignup} onRemove={this.onRemove} />
                                         </li>
                                     )
                                 })}
@@ -84,7 +94,7 @@ export class EventList extends React.Component<IProps, IState> {
                 ...this.state,
                 cities: response.data
             })
-        } catch(error) {
+        } catch (error) {
             if (axios.isCancel(error)) {
                 console.log('Request canceled', error);
             } else {
