@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {NavBar} from './NavBar';
 import { act } from 'react-dom/test-utils';
+import { BrowserRouter } from 'react-router-dom';
 
 let container: HTMLDivElement;
 
@@ -19,14 +20,14 @@ afterEach(() => {
 
 it('renders navbar component without crashing', () => {
   act(() => {
-    ReactDOM.render(<NavBar />, container);
+    ReactDOM.render(<BrowserRouter><NavBar /></BrowserRouter>, container);
   });
 });
 
 
 it('renders navbar component with 2 lis', () => {
   act(() => {
-    ReactDOM.render(<NavBar />, container);
+    ReactDOM.render(<BrowserRouter><NavBar /></BrowserRouter>, container);
   });
 
   expect(
