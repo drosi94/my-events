@@ -1,7 +1,7 @@
 import React from 'react';
 import axios, { CancelTokenSource, AxiosResponse } from 'axios';
 
-import './AllEvents.css';
+import './EventList.css';
 
 import { getEvents } from '../../services/events/EventsProvider'
 import { Event } from '../../services/events/Event';
@@ -15,7 +15,7 @@ interface IProps {
     events?: Event[];
 }
 
-export class AllEvents extends React.Component<IProps, IState> {
+export class EventList extends React.Component<IProps, IState> {
     readonly initialState: Readonly<IState>;
 
     private _source: CancelTokenSource | undefined;
@@ -42,8 +42,9 @@ export class AllEvents extends React.Component<IProps, IState> {
     }
 
     async componentDidMount() {
-        await this.fetchAllEvents();
-        console.log(this.state);
+        if (!this.props.events){
+            await this.fetchAllEvents();
+        }
     }
 
     private async fetchAllEvents() {
