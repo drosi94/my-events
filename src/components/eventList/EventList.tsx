@@ -131,5 +131,9 @@ export class EventList extends React.Component<IProps, IState> {
         if (this._sourceEvents) {
             this._sourceEvents.cancel('Operation Cancelled');
         }
+
+        if (this._sourceCities) {
+            this._sourceCities.cancel('Operation Cancelled');
+        }
     }
 }
