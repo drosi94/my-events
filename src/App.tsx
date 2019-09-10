@@ -35,7 +35,7 @@ const onSignup = (event: IEvent) => {
 const onRemove = (event: IEvent) => {
     myEvents = localStorage.getItem('myEvents') ? JSON.parse(localStorage.getItem('myEvents') as string) : [];
     if (isSignedUp(event.id)) {
-        myEvents.splice(myEvents.findIndex((event: IEvent) => event.id === event.id), 1);
+        myEvents.splice(myEvents.findIndex((myEvent: IEvent) => myEvent.id === event.id), 1);
         localStorage.setItem('myEvents', JSON.stringify(myEvents));
     }
 };

@@ -2,9 +2,11 @@
     --main-bg-color: #ebeced;
     --green-color: #458314;
     --dark-gray-color: #9ba8a6;
+    --darker-gray-color: #a4a8a8d2;
     --default-button-color: #127fab;
     --white-color: #fff;
     --black-color: #000;
+    --base-font-size: 1.6rem;
 }
 
 html {
@@ -16,7 +18,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-size: 1.6rem;
+    font-size: var(--base-font-size);
     background-color: var(--main-bg-color);
 }
 
@@ -52,4 +54,16 @@ code {
 
 .button-default:hover {
     background-color: var(--default-button-color);
+}
+
+@media all and (max-width: 1200px) {
+     :root {
+        --base-font-size: 1.4rem;
+    }
+}
+
+@media all and (max-width: 600px) {
+     :root {
+        --base-font-size: 1rem;
+    }
 }
