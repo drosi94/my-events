@@ -1,4 +1,4 @@
-export interface Event {
+export interface IEvent {
     id: number;
     isFree: boolean;
     name: string

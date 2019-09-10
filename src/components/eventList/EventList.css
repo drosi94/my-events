@@ -1,0 +1,19 @@
+.events-list {
+    display: flex;
+}
+
+.events-list>ul {
+    display: flex;
+    flex: 1;
+    list-style: none;
+    flex-direction: column;
+    align-content: center;
+}
+
+.events-list>ul li {
+    height: 50px;
+}
+
+.events-list--border {
+    border-bottom: 0.2rem solid #ebeced;
+}

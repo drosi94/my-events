@@ -7,7 +7,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 const App: React.FC = () => {
     return (
         <Router>
-            <div>
+            <div className="page">
                 <NavBar />
                 <Route exact path="/" component={AllEvents}></Route>
                 <Route exact path="/events" component={AllEvents}></Route>

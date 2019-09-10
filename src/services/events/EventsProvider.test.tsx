@@ -2,7 +2,7 @@ import React from 'react';
 
 import mockAxios, { AxiosResponse } from 'axios';
 
-import { Event } from './Event';
+import { IEvent } from './IEvent';
 import { getEvents } from './EventsProvider';
 
 
@@ -217,8 +217,8 @@ it('call events mocking API and returns a list of events - should success', asyn
         ));
 
     // Act
-    const events: AxiosResponse<Event[]> = await getEvents();
-    const event: Event = events.data ? events.data.find((event: Event) => event.id === 24) : null;
+    const events: AxiosResponse<IEvent[]> = await getEvents();
+    const event: IEvent = events.data ? events.data.find((event: IEvent) => event.id === 24) : null;
 
     // Assert
     expect(events.data).toHaveLength(25);

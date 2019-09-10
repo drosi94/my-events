@@ -4,21 +4,25 @@ import axios, { CancelTokenSource, AxiosResponse } from 'axios';
 import './EventList.css';
 
 import { getEvents } from '../../services/events/EventsProvider'
-import { Event } from '../../services/events/Event';
+import { IEvent } from '../../services/events/IEvent';
+import Event from '../event/Event';
+
 
 interface IState {
     isFetchingData: boolean;
-    events: Event[];
+    events: IEvent[];
 }
 
 interface IProps {
-    events?: Event[];
+    events?: IEvent[];
 }
 
 export class EventList extends React.Component<IProps, IState> {
     readonly initialState: Readonly<IState>;
 
     private _source: CancelTokenSource | undefined;
+
+    private eventsByDay: { [key: number]: IEvent[] };
 
     constructor(props: IProps) {
         super(props);
@@ -27,24 +31,41 @@ export class EventList extends React.Component<IProps, IState> {
             events: this.props.events || []
         }
         this.state = this.initialState;
+        this.eventsByDay = {};
     }
 
     render() {
+        const hasMoreThanOneEvent: boolean = this.state.events.length > 1;
         return (
-            <div className="events-list">
-                <ul>
-                    {this.state.events.map((event: Event) => {
-                        return <li key={event.id}>{event.name}</li>
-                    })}
-                </ul>
+            <div>
+                {Object.keys(this.eventsByDay).map((key1: any) => {
+                    return (
+                        <div key={key1} className="events-list">
+                            <ul>
+                                {this.eventsByDay[key1].map((event: IEvent) => {
+                                    return (
+                                        <li key={event.id} className={`${hasMoreThanOneEvent ? 'events-list--border ' : ''}`}>
+                                            <Event event={event} />
+                                        </li>
+                                    )
+                                })}
+                            </ul>
+                        </div>
+                    )
+                })}
             </div>
         );
     }
 
     async componentDidMount() {
-        if (!this.props.events){
+        if (!this.props.events) {
             await this.fetchAllEvents();
         }
+        this.groupByDate();
+        this.setState({
+            ...this.state,
+            isFetchingData: false
+        });
     }
 
     private async fetchAllEvents() {
@@ -54,10 +75,9 @@ export class EventList extends React.Component<IProps, IState> {
                 isFetchingData: true
             });
             this._source = axios.CancelToken.source();
-            const response: AxiosResponse<Event[]> = await getEvents(this._source.token);
+            const response: AxiosResponse<IEvent[]> = await getEvents(this._source.token);
             this.setState({
                 ...this.state,
-                isFetchingData: false,
                 events: response.data
             });
         } catch (error) {
@@ -67,6 +87,16 @@ export class EventList extends React.Component<IProps, IState> {
                 console.log(error);
             }
         }
+    }
+
+    private groupByDate(): void {
+        this.state.events.forEach((event: IEvent, index: number) => {
+            let d: Date = new Date(event.startDate);
+            const date: number = Math.floor(d.getTime() / (1000 * 60 * 60 * 24));
+            this.eventsByDay[date] = this.eventsByDay[date] || [];
+            this.eventsByDay[date].push(event);
+            this.eventsByDay = Object.keys(this.eventsByDay).reduce((a: any, c: any) => (a[c] = this.eventsByDay[c], a), {});
+        });
     }
 
     componentWillUnmount() {

@@ -46,7 +46,7 @@ it('renders allevents with one li for each event', () => {
   });
 
   expect(
-    container.querySelectorAll("li")
+    container.querySelectorAll(".event")
   ).toHaveLength(2);
 
 });

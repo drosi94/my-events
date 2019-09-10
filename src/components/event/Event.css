@@ -1,0 +1,35 @@
+.event {
+    display: flex;
+    list-style: none;
+    background-color: #fff;
+}
+
+.event li {
+    align-items: center;
+    align-content: center;
+    display: flex;
+}
+
+.event .event--time {
+    flex: 0.2;
+}
+
+.event .event--name {
+    flex: 0.6;
+}
+
+.event .event--buttons {
+    flex: 0.2;
+}
+
+@media all and (max-width: 600px) {
+    .event {
+        flex-wrap: wrap;
+    }
+    .event>li {
+        flex-basis: 100%;
+    }
+    .event>li:not(:first-child) {
+        margin-top: 0.8rem;
+    }
+}
