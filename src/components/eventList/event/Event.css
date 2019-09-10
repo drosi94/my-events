@@ -15,13 +15,14 @@
 }
 
 .event .event--details {
-    flex: 0.6;
+    flex: 1;
     display: flex;
     flex-direction: column;
 }
 
 .event .event--details .event--details-name {
     flex: 1;
+    margin-top: 2rem;
 }
 
 .event .event--details .event-free {
@@ -43,10 +44,15 @@
     flex: 0.2;
 }
 
-@media all and (max-width: 600px) {
+@media all and (max-width: 1200px) {
     .event, .event .event--details {
         flex-wrap: wrap;
     }
+
+    .event .event--details .event--details-name {
+        margin-top: 2.5rem;
+    }
+
     .event>li {
         flex-basis: 100%;
     }
