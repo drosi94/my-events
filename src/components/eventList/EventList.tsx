@@ -7,11 +7,14 @@ import { getEvents } from '../../services/events/EventsProvider'
 import { IEvent } from '../../services/events/IEvent';
 import Event from './event/Event';
 import { DateUtils } from '../../utils/DateUtils';
+import { getCities } from '../../services/cities/CityProvider';
+import { ICity } from '../../services/cities/ICity';
 
 
 interface IState {
     isFetchingData: boolean;
     events: IEvent[];
+    cities: ICity[];
 }
 
 interface IProps {
@@ -21,7 +24,8 @@ interface IProps {
 export class EventList extends React.Component<IProps, IState> {
     readonly initialState: Readonly<IState>;
 
-    private _source: CancelTokenSource | undefined;
+    private _sourceEvents: CancelTokenSource | undefined;
+    private _sourceCities: CancelTokenSource | undefined;
 
     private eventsByDay: { [key: number]: IEvent[] };
 
@@ -29,7 +33,8 @@ export class EventList extends React.Component<IProps, IState> {
         super(props);
         this.initialState = {
             isFetchingData: false,
-            events: this.props.events || []
+            events: this.props.events || [],
+            cities: []
         }
         this.state = this.initialState;
         this.eventsByDay = {};
@@ -61,6 +66,7 @@ export class EventList extends React.Component<IProps, IState> {
 
     async componentDidMount() {
         if (!this.props.events) {
+            await this.fetchAllCities();
             await this.fetchAllEvents();
         }
         this.groupByDate();
@@ -70,17 +76,37 @@ export class EventList extends React.Component<IProps, IState> {
         });
     }
 
+    private async fetchAllCities() {
+        try {
+            this._sourceCities = axios.CancelToken.source();
+            const response: AxiosResponse<ICity[]> = await getCities(this._sourceCities.token);
+            this.setState({
+                ...this.state,
+                cities: response.data
+            })
+        } catch(error) {
+            if (axios.isCancel(error)) {
+                console.log('Request canceled', error);
+            } else {
+                console.log(error);
+            }
+        }
+    }
+
     private async fetchAllEvents() {
         try {
             this.setState({
                 ...this.state,
                 isFetchingData: true
             });
-            this._source = axios.CancelToken.source();
-            const response: AxiosResponse<IEvent[]> = await getEvents(this._source.token);
+            this._sourceEvents = axios.CancelToken.source();
+            const response: AxiosResponse<IEvent[]> = await getEvents(this._sourceEvents.token);
             this.setState({
                 ...this.state,
-                events: response.data
+                events: response.data.map((event: IEvent) => {
+                    event.city = this.state.cities.find((city: ICity) => city.id === event.city);
+                    return event;
+                })
             });
         } catch (error) {
             if (axios.isCancel(error)) {
@@ -102,8 +128,8 @@ export class EventList extends React.Component<IProps, IState> {
     }
 
     componentWillUnmount() {
-        if (this._source) {
-            this._source.cancel('Operation Cancelled');
+        if (this._sourceEvents) {
+            this._sourceEvents.cancel('Operation Cancelled');
         }
     }
 }

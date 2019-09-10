@@ -1,16 +1,17 @@
 import React from 'react';
 
-import mockAxios from 'axios';
+import mockAxios, { AxiosResponse } from 'axios';
 
 import { getCities } from './CityProvider';
+import { ICity } from './ICity';
 
 
 // First use case - Get cities
 it('call cities mocking API and returns a list of cities - should success', async () => {
     // Arrange
     (mockAxios.get as jest.Mock).mockImplementationOnce(() =>
-        Promise.resolve(
-            [
+        Promise.resolve({
+            data: [
                 {
                     "id": 1,
                     "name": "Barcelona"
@@ -52,15 +53,15 @@ it('call cities mocking API and returns a list of cities - should success', asyn
                     "name": "Edimburg"
                 }
             ]
+        }
         ));
 
     // Act
-    const cities: any[] = await getCities();
-    const barcelona = cities ? cities.find((city: any) => city.id === 1): null;
+    const cities: AxiosResponse<ICity[]> = await getCities();
+    const barcelona: ICity = cities.data ? cities.data.find((city: any) => city.id === 1) : null;
 
     // Assert
-    expect(cities).toHaveLength(10);
+    expect(cities.data).toHaveLength(10);
     expect(barcelona).not.toBeNull();
     expect(barcelona.name).toBe('Barcelona');
-
 });
