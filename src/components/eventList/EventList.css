@@ -2,6 +2,12 @@
     display: flex;
 }
 
+.events-list--date {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 3rem;
+}
+
 .events-list>ul {
     display: flex;
     flex: 1;
@@ -11,9 +17,21 @@
 }
 
 .events-list>ul li {
-    height: 50px;
+    width: 50%;
+    margin: 0 auto;
+    height: 70px;
 }
 
 .events-list--border {
     border-bottom: 0.2rem solid #ebeced;
+}
+
+@media all and (max-width: 1200px) {
+    .events-list>ul  {
+        flex-wrap: wrap;
+    }
+    .events-list>ul li  {
+        width: 100%;
+        height: 100px;
+    }
 }

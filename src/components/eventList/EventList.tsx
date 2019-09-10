@@ -5,7 +5,8 @@ import './EventList.css';
 
 import { getEvents } from '../../services/events/EventsProvider'
 import { IEvent } from '../../services/events/IEvent';
-import Event from '../event/Event';
+import Event from './event/Event';
+import { DateUtils } from '../../utils/DateUtils';
 
 
 interface IState {
@@ -42,6 +43,7 @@ export class EventList extends React.Component<IProps, IState> {
                     return (
                         <div key={key1} className="events-list">
                             <ul>
+                                <span className="events-list--date">{DateUtils.extractOnlyDate(new Date(this.eventsByDay[key1][0].startDate))}</span>
                                 {this.eventsByDay[key1].map((event: IEvent) => {
                                     return (
                                         <li key={event.id} className={`${hasMoreThanOneEvent ? 'events-list--border ' : ''}`}>

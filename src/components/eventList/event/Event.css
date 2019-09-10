@@ -14,8 +14,29 @@
     flex: 0.2;
 }
 
-.event .event--name {
+.event .event--details {
     flex: 0.6;
+    display: flex;
+    flex-direction: column;
+}
+
+.event .event--details .event--details-name {
+    flex: 1;
+}
+
+.event .event--details .event-free {
+    margin: 0 1.6rem;
+    color: green;
+}
+
+.event .event--details .event--details-city {
+    font-size: 1.4rem;
+}
+
+.event .event--details .event--details-duration {
+    font-size: 1rem;
+    margin: 0 1rem;
+    color: gray;
 }
 
 .event .event--buttons {
@@ -23,7 +44,7 @@
 }
 
 @media all and (max-width: 600px) {
-    .event {
+    .event, .event .event--details {
         flex-wrap: wrap;
     }
     .event>li {
