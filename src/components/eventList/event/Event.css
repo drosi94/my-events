@@ -1,7 +1,7 @@
 .event {
     display: flex;
     list-style: none;
-    background-color: #fff;
+    background-color: var(--white-color);
 }
 
 .event li {
@@ -12,6 +12,7 @@
 
 .event .event--time {
     flex: 0.2;
+    font-weight: 600;
 }
 
 .event .event--details {
@@ -21,23 +22,21 @@
 }
 
 .event .event--details .event--details-name {
+    font-weight: 600;
     flex: 1;
     margin-top: 2rem;
 }
 
 .event .event--details .event-free {
     margin: 0 1.6rem;
-    color: green;
+    color: var(--green-color);
 }
 
 .event .event--details .event--details-city {
+    flex: 1;
     font-size: 1.4rem;
-}
-
-.event .event--details .event--details-duration {
-    font-size: 1rem;
-    margin: 0 1rem;
-    color: gray;
+    color: var(--dark-gray-color);
+    font-weight: 600;
 }
 
 .event .event--buttons {
@@ -45,14 +44,13 @@
 }
 
 @media all and (max-width: 1200px) {
-    .event, .event .event--details {
+    .event,
+    .event .event--details {
         flex-wrap: wrap;
     }
-
     .event .event--details .event--details-name {
         margin-top: 2.5rem;
     }
-
     .event>li {
         flex-basis: 100%;
     }

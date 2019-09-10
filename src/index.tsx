@@ -9,7 +9,7 @@ import * as serviceWorker from './serviceWorker';
 
 WebFont.load({
     google: {
-        families: ['Roboto Web:300,400,700', 'sans-serif']
+        families: ['Roboto', 'sans-serif']
     }
 });
 ReactDOM.render(<App />, document.getElementById('root'));

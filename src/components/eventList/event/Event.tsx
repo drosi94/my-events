@@ -34,15 +34,13 @@ const Event: React.FC<Readonly<IProps>> = (props: IProps) => {
                 <span className="event--details-name">{props.event.name}
                     {props.event.isFree && <span className="event-free">Free!</span>}
                 </span>
-                <span className="event--details-city">{(props.event.city as ICity).name}
-                    <span className="event--details-duration">
-                        {DateUtils.durationInHoursAndMinutes(new Date(props.event.startDate), new Date(props.event.endDate))}
-                    </span>
+                <span className="event--details-city">{(props.event.city as ICity).name}&nbsp;-&nbsp;
+                {DateUtils.durationInHoursAndMinutes(new Date(props.event.startDate), new Date(props.event.endDate))}
                 </span>
             </li>
             <li className="event--buttons">
-                {!isSignedUp() && <button onClick={onSignup}>Signup</button>}
-                {isSignedUp() && <button onClick={onRemove}>Remove</button>}
+                {!isSignedUp() && <button className="button button-default" onClick={onSignup}>Signup</button>}
+                {isSignedUp() && <button className="button button-default" onClick={onRemove}>Remove</button>}
             </li>
         </ul>
     );
