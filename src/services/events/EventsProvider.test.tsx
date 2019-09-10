@@ -1,8 +1,8 @@
 import React from 'react';
 
-import mockAxios from 'axios';
+import mockAxios, { AxiosResponse } from 'axios';
 
-import {Event} from './Event';
+import { Event } from './Event';
 import { getEvents } from './EventsProvider';
 
 
@@ -10,8 +10,8 @@ import { getEvents } from './EventsProvider';
 it('call events mocking API and returns a list of events - should success', async () => {
     // Arrange
     (mockAxios.get as jest.Mock).mockImplementationOnce(() =>
-        Promise.resolve(
-            [
+        Promise.resolve({
+            data: [
                 {
                     "id": 0,
                     "isFree": true,
@@ -213,14 +213,15 @@ it('call events mocking API and returns a list of events - should success', asyn
                     "endDate": "2019-09-16T23:15:00+00:00"
                 }
             ]
+        }
         ));
 
     // Act
-    const events: Event[] = await getEvents();
-    const event: Event = events ? events.find((event: Event) => event.id === 24) : null;
+    const events: AxiosResponse<Event[]> = await getEvents();
+    const event: Event = events.data ? events.data.find((event: Event) => event.id === 24) : null;
 
     // Assert
-    expect(events).toHaveLength(25);
+    expect(events.data).toHaveLength(25);
     expect(event).not.toBeNull();
     expect(event.isFree).toBeTruthy();
 });
