@@ -2,6 +2,8 @@ nav {
     display: flex;
     border-bottom: 0.01em solid #9ba8a6;
     background-color: #fff;
+    position: sticky;
+    top: 0;
 }
 
 nav .logo-container {

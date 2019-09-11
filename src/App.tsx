@@ -43,12 +43,35 @@ const onRemove = (event: IEvent) => {
 const AllEvents: React.FC = () => {
     return <EventList onSignup={onSignup} onRemove={onRemove} />
 }
-const MyEvents: React.FC = () => {
-    return <EventList
-        events={JSON.parse(localStorage.getItem('myEvents') as string) as IEvent[]}
-        onSignup={onSignup}
-        onRemove={onRemove}
-    />
+class MyEvents extends React.Component<any, any> {
+    readonly inialState: any = {
+        events: JSON.parse(localStorage.getItem('myEvents') as string) as IEvent[]
+    };
+
+    constructor(props: any) {
+        super(props);
+        this.state = this.inialState;
+    }
+
+    onSignup = (event: IEvent) => {
+        myEvents = localStorage.getItem('myEvents') ? JSON.parse(localStorage.getItem('myEvents') as string) : [];
+        if (!isSignedUp(event.id)) {
+            myEvents.push(event);
+            localStorage.setItem('myEvents', JSON.stringify(myEvents));
+            this.setState({
+                ...this.state,
+               events: myEvents
+            });
+        }
+    };
+
+    render() {
+        return (<EventList
+            events={this.state.events}
+            onSignup={this.onSignup}
+            onRemove={onRemove}
+        />)
+    }
 }
 
 export default App;
