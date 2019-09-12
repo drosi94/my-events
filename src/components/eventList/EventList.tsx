@@ -14,11 +14,13 @@ import { ICity } from '../../services/cities/ICity';
 interface IState {
     isFetchingData: boolean;
     events: IEvent[];
+    eventsByDay: { [key: number]: IEvent[] };
     cities: ICity[];
 }
 
 interface IProps {
     events?: IEvent[];
+    myEvents?: boolean;
     onSignup: Function;
     onRemove: Function;
 }
@@ -29,17 +31,15 @@ export class EventList extends React.Component<IProps, IState> {
     private _sourceEvents: CancelTokenSource | undefined;
     private _sourceCities: CancelTokenSource | undefined;
 
-    private eventsByDay: { [key: number]: IEvent[] };
-
     constructor(props: IProps) {
         super(props);
         this.initialState = {
             isFetchingData: false,
             events: this.props.events || [],
+            eventsByDay: {},
             cities: []
         }
         this.state = this.initialState;
-        this.eventsByDay = {};
     }
 
     onSignup = (event: IEvent) => {
@@ -50,16 +50,29 @@ export class EventList extends React.Component<IProps, IState> {
         this.props.onRemove(event);
     }
 
+    componentDidUpdate(prevProps: IProps, prevState: IState, snapshot: any) {
+        if (this.state.events !== this.props.events && this.props.myEvents) {
+            this.setState({
+                ...this.state,
+                events: this.props.events as IEvent[],
+                eventsByDay: this.groupByDate(this.props.events as IEvent[])
+            })
+        }
+    }
+
     render() {
         const hasMoreThanOneEvent: boolean = this.state.events.length > 1;
         return (
             <div>
-                {Object.keys(this.eventsByDay).map((key1: any) => {
+                {Object.keys(this.state.eventsByDay).map((key1: any) => {
                     return (
                         <div key={key1} className="events-list">
                             <ul>
-                                <span className="events-list--date">{DateUtils.extractOnlyDate(new Date(this.eventsByDay[key1][0].startDate))}</span>
-                                {this.eventsByDay[key1].map((event: IEvent) => {
+                                {
+                                    this.state.eventsByDay[key1] &&
+                                    <span className="events-list--date">{DateUtils.extractOnlyDate(new Date(this.state.eventsByDay[key1][0].startDate))}</span>
+                                }
+                                {this.state.eventsByDay[key1].map((event: IEvent) => {
                                     return (
                                         <li key={event.id} className={`${hasMoreThanOneEvent ? 'events-list--border ' : ''}`}>
                                             <Event event={event} onSignup={this.onSignup} onRemove={this.onRemove} />
@@ -76,13 +89,17 @@ export class EventList extends React.Component<IProps, IState> {
 
     async componentDidMount() {
         if (!this.props.events) {
+            this.setState({
+                ...this.state,
+                isFetchingData: true
+            });
             await this.fetchAllCities();
             await this.fetchAllEvents();
         }
-        this.groupByDate();
         this.setState({
             ...this.state,
-            isFetchingData: false
+            eventsByDay: this.groupByDate(this.state.events),
+            isFetchingData: false,
         });
     }
 
@@ -105,10 +122,6 @@ export class EventList extends React.Component<IProps, IState> {
 
     private async fetchAllEvents() {
         try {
-            this.setState({
-                ...this.state,
-                isFetchingData: true
-            });
             this._sourceEvents = axios.CancelToken.source();
             const response: AxiosResponse<IEvent[]> = await getEvents(this._sourceEvents.token);
             this.setState({
@@ -127,23 +140,29 @@ export class EventList extends React.Component<IProps, IState> {
         }
     }
 
-    private groupByDate(): void {
-        this.state.events.forEach((event: IEvent, index: number) => {
+    private groupByDate(events: IEvent[]): { [key: number]: IEvent[] } {
+        let eventsByDay: { [key: number]: IEvent[] } = {};
+        events.forEach((event: IEvent) => {
             let d: Date = new Date(event.startDate);
             const date: number = Math.floor(d.getTime() / (1000 * 60 * 60 * 24));
-            this.eventsByDay[date] = this.eventsByDay[date] || [];
-            this.eventsByDay[date].push(event);
-            this.eventsByDay = Object.keys(this.eventsByDay).reduce((a: any, c: any) => (a[c] = this.eventsByDay[c], a), {});
+            eventsByDay[date] = eventsByDay[date] || [];
+            eventsByDay[date].push(event);
+            eventsByDay = Object.keys(eventsByDay).reduce((a: any, c: any) => (a[c] = eventsByDay[c], a), {});
         });
+        this.setState({
+            ...this.state,
+            eventsByDay
+        });
+        return eventsByDay;
     }
 
     componentWillUnmount() {
         if (this._sourceEvents) {
-            this._sourceEvents.cancel('Operation Cancelled');
+            this._sourceEvents.cancel('GET Events - Operation Cancelled');
         }
 
         if (this._sourceCities) {
-            this._sourceCities.cancel('Operation Cancelled');
+            this._sourceCities.cancel('GET Cities - Operation Cancelled');
         }
     }
 }

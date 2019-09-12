@@ -44,13 +44,13 @@ const AllEvents: React.FC = () => {
     return <EventList onSignup={onSignup} onRemove={onRemove} />
 }
 class MyEvents extends React.Component<any, any> {
-    readonly inialState: any = {
+    readonly intialState: any = {
         events: JSON.parse(localStorage.getItem('myEvents') as string) as IEvent[]
     };
 
     constructor(props: any) {
         super(props);
-        this.state = this.inialState;
+        this.state = this.intialState;
     }
 
     onSignup = (event: IEvent) => {
@@ -65,11 +65,25 @@ class MyEvents extends React.Component<any, any> {
         }
     };
 
+    onRemove = (event: IEvent) => {
+        myEvents = localStorage.getItem('myEvents') ? JSON.parse(localStorage.getItem('myEvents') as string) : [];
+        if (isSignedUp(event.id)) {
+            myEvents.splice(myEvents.findIndex((myEvent: IEvent) => myEvent.id === event.id), 1);
+            localStorage.setItem('myEvents', JSON.stringify(myEvents));
+
+            this.setState({
+                ...this.state,
+               events: myEvents
+            });
+        }
+    };
+
     render() {
         return (<EventList
+            myEvents={true}
             events={this.state.events}
             onSignup={this.onSignup}
-            onRemove={onRemove}
+            onRemove={this.onRemove}
         />)
     }
 }
