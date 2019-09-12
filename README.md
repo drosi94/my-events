@@ -1,3 +1,9 @@
+## Details
+Tried to use the TDD approach so i started creating some tests in the beggining before the actual code. If I had more time I would separate some components like modal and make more css tweaks and better responsiveness. You can access to the final web-app here https://trivago-vdrosatos-myevents.herokuapp.com.
+
+Thank you!
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

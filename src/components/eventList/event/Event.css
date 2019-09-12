@@ -112,4 +112,19 @@
     .event>li:not(:first-child) {
         margin-top: 0.8rem;
     }
+    .modal {
+        width: 40rem;
+    }
+}
+
+@media all and (max-width: 600px) {
+    .modal {
+        width: 20rem;
+    }
+}
+
+@media all and (max-height: 600px) {
+    .modal {
+        height: 40rem;
+    }
 }

@@ -11,7 +11,7 @@ nav .logo-container {
 }
 
 nav .logo-container .logo {
-    width: 7rem;
+    width: 10rem;
     height: 7rem;
     border: 0;
 }
@@ -24,6 +24,23 @@ nav .links-container {
 
 nav .links-container>li {
     flex: 0.1;
+}
+
+nav .links-container>li a {
+    text-transform: capitalize;
+    text-decoration: none;
+    display: inline-block;
+    color: var(--dark-gray-color)!important;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+nav .links-container>li .active {
+    color: var(--default-button-color)!important;
+}
+
+nav .links-container>li a:visited {
+    color: inherit;
 }
 
 @media all and (max-width: 600px) {

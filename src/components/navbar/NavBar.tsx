@@ -2,7 +2,7 @@ import React from 'react';
 
 import './NavBar.css';
 import logo from './logo256.png';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 export function NavBar() {
     return (
@@ -12,10 +12,10 @@ export function NavBar() {
             </div>
             <ul className="links-container">
                 <li>
-                    <Link to="/events">All Events</Link>
+                    <NavLink activeClassName="active" to="/events">All Events</NavLink>
                 </li>
                 <li>
-                    <Link to="/myevents">My Events</Link>
+                    <NavLink activeClassName="active" to="/myevents">My Events</NavLink>
                 </li>
             </ul>
         </nav>

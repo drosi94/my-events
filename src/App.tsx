@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import { NavBar } from './components/navbar/NavBar';
 import { EventList } from './components/eventList/EventList';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import { IEvent } from './services/events/IEvent';
 
 const App: React.FC = () => {
@@ -10,9 +10,12 @@ const App: React.FC = () => {
         <Router>
             <div className="page">
                 <NavBar />
-                <Route exact path="/" component={AllEvents}></Route>
-                <Route exact path="/events" component={AllEvents}></Route>
-                <Route exact path="/myevents" component={MyEvents}></Route>
+                <Redirect exact from="/" to="/events" />
+                <Switch>
+                    <Route exact path="/events" component={AllEvents} />
+                    <Route exact path="/myevents" component={MyEvents} />
+                    <Route component={NoMatchPage} />
+                </Switch>
             </div>
         </Router>
 
@@ -60,7 +63,7 @@ class MyEvents extends React.Component<any, any> {
             localStorage.setItem('myEvents', JSON.stringify(myEvents));
             this.setState({
                 ...this.state,
-               events: myEvents
+                events: myEvents
             });
         }
     };
@@ -73,7 +76,7 @@ class MyEvents extends React.Component<any, any> {
 
             this.setState({
                 ...this.state,
-               events: myEvents
+                events: myEvents
             });
         }
     };
@@ -87,5 +90,11 @@ class MyEvents extends React.Component<any, any> {
         />)
     }
 }
+
+const NoMatchPage = () => {
+    return (
+        <h3>404 - Not found</h3>
+    );
+};
 
 export default App;
