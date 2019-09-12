@@ -55,7 +55,7 @@ export class EventList extends React.Component<IProps, IState> {
             this.setState({
                 ...this.state,
                 events: this.props.events as IEvent[],
-                eventsByDay: this.groupByDate(this.props.events as IEvent[])
+                eventsByDay: this.groupByDate(this.props.events ? this.props.events : [] as IEvent[])
             })
         }
     }
