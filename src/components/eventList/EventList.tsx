@@ -61,7 +61,7 @@ export class EventList extends React.Component<IProps, IState> {
     }
 
     render() {
-        const hasMoreThanOneEvent: boolean = this.state.events.length > 1;
+        const hasMoreThanOneEvent: boolean = this.state.events && this.state.events.length > 1;
         return (
             <div>
                 {Object.keys(this.state.eventsByDay).map((key1: any) => {

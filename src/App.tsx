@@ -81,7 +81,7 @@ class MyEvents extends React.Component<any, any> {
     render() {
         return (<EventList
             myEvents={true}
-            events={this.state.events}
+            events={this.state.events ? this.state.events : []}
             onSignup={this.onSignup}
             onRemove={this.onRemove}
         />)
